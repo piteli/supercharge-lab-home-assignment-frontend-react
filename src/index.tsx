@@ -5,13 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ToastStore from './store/toast.store';
 import { Provider } from 'mobx-react';
+import { BrowserRouter } from "react-router-dom";
 
 const toastStore = new ToastStore();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider toastStore={toastStore}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
