@@ -1,9 +1,8 @@
 import React from 'react';
-import { HEADLINE_LOGIN } from './Login.constant';
+import { HEADLINE_LOGIN, LOGIN_SUCCESS_MESSAGE } from './Login.constant';
 import { AUTHENTICATION_TYPE, GENERAL_ERROR_MESSAGE, LOGIN_API, LOGIN_WRONG_INPUT_MESSAGE } from '../../utils/constants/api.constant';
 import './Login.css';
 import { loginObjectType } from './Login.model';
-import { LoadingSpinnerComponent } from '../../components/loading-spinner/LoadingSpinner';
 import { hasErrorResponse } from '../../services/response.service';
 import { observer, inject } from "mobx-react";
 import ApiService from '../../services/api.service';
@@ -11,17 +10,17 @@ import StorageService from '../../services/storage.service';
 import { USER_DETAILS } from '../../utils/constants/key-storage.constant';
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from '../../utils/constants/routes.constant';
+import { TOAST_BG_COLOR } from '../../utils/constants/component.constant';
 
-function LoginView({toastStore}: any) {
+function LoginView({toastStore, loadingSpinnerStore}: any) {
     const defaultUserInput: loginObjectType = {username : '', password: ''};
     const [userInput, setUserInput] = React.useState(defaultUserInput);
-    const [isLoadingShown, setLoadingVisiblity] = React.useState(false);
     const navigate = useNavigate();
 
     function loginClicked() {
         if(userInput.username === '' || userInput.password === '')
             return displayErrorInputMessage();
-        setLoadingVisiblity(true);
+        loadingSpinnerStore.SetLoadingVisibilityColorAndMessage(true, 'Logging In...');
         callLoginAPI();
     }
 
@@ -29,20 +28,21 @@ function LoginView({toastStore}: any) {
         new ApiService().post(LOGIN_API, userInput, AUTHENTICATION_TYPE.BASIC)
             .then((res) => res.json()).then((responseJSON) => {
                 if(hasErrorResponse(responseJSON)) {
-                    setLoadingVisiblity(false);
-                    toastStore.setToastVisibility(true, GENERAL_ERROR_MESSAGE);
+                    loadingSpinnerStore.SetLoadingVisibilityColorAndMessage(false);
+                    toastStore.setToastVisibilityAndMessage(true, TOAST_BG_COLOR.ERROR, GENERAL_ERROR_MESSAGE);
                     return;
                 }
                 new StorageService().setLocalStorage(responseJSON, USER_DETAILS);
+                toastStore.setToastVisibilityAndMessage(true, TOAST_BG_COLOR.ERROR, LOGIN_SUCCESS_MESSAGE);
                 navigate(ROUTES.FRIENDS);
             }).catch((e) => {
-                setLoadingVisiblity(false);
-                toastStore.setToastVisibility(true, GENERAL_ERROR_MESSAGE);
+                loadingSpinnerStore.SetLoadingVisibilityColorAndMessage(false);
+                toastStore.setToastVisibilityAndMessage(true, TOAST_BG_COLOR.ERROR, GENERAL_ERROR_MESSAGE);
             })
     }
 
     function displayErrorInputMessage(){
-        toastStore.setToastVisibility(true, LOGIN_WRONG_INPUT_MESSAGE);
+        toastStore.setToastVisibilityAndMessage(true, LOGIN_WRONG_INPUT_MESSAGE);
         return;
     }
 
@@ -58,17 +58,8 @@ function LoginView({toastStore}: any) {
             <input onChange={(event) => saveInputChanged(event.target.value, 'username')} />
             <input onChange={(event) => saveInputChanged(event.target.value, 'password')} />
             <button onClick={loginClicked}>Login</button>
-
-            <div className="overlay">
-                {isLoadingShown ? 
-                    <LoadingSpinnerComponent
-                    {...{color: 'black', size: 100, message: 'Logging In...'}}
-                    /> 
-                : 
-                    null}
-            </div>
         </div>
     );
 };
 
-export default inject('toastStore')(observer(LoginView));
+export default inject('toastStore', 'loadingSpinnerStore')(observer(LoginView));

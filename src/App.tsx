@@ -9,13 +9,13 @@ import { Routes, Route } from "react-router-dom";
 import { ROUTES } from './utils/constants/routes.constant';
 import ToastComponent from './components/toast/Toast';
 
-function App({toastStore}: any) {
+function App({toastStore, loadingSpinnerStore}: any) {
   
   return (
     <div>
-      {/* <LoginView /> */}
+      <LoginView />
       {/* <LoadingSpinnerComponent /> */}
-      <ToastComponent />
+      {/* <ToastComponent /> */}
       {/* <RegisterView /> */}
       {/* <FriendsView /> */}
       {/* <ChatView /> */}
@@ -27,10 +27,14 @@ function App({toastStore}: any) {
       </Routes>
         {
             toastStore.isToastVisible ?
+              <ToastComponent /> : null
+        }
+        {
+            loadingSpinnerStore.isLoadingVisible ?
               <LoadingSpinnerComponent /> : null
         }
     </div>
   );
 }
 
-export default inject('toastStore')(observer(App));
+export default inject('toastStore', 'loadingSpinnerStore')(observer(App));

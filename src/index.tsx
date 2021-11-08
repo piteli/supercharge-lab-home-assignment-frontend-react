@@ -4,14 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ToastStore from './store/toast.store';
+import LoadingSpinnerStore from './store/loading-spinner.store';
 import { Provider } from 'mobx-react';
 import { BrowserRouter } from "react-router-dom";
 
 const toastStore = new ToastStore();
+const loadingSpinnerStore = new LoadingSpinnerStore();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider toastStore={toastStore}>
+    <Provider 
+      toastStore={toastStore} 
+      loadingSpinnerStore={loadingSpinnerStore}
+    >
       <BrowserRouter>
         <App />
       </BrowserRouter>
