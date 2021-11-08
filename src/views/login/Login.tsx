@@ -18,10 +18,10 @@ function LoginView({toastStore, loadingSpinnerStore}: any) {
     const navigate = useNavigate();
 
     function loginClicked() {
-        // if(userInput.username === '' || userInput.password === '')
-        //     return displayErrorInputMessage();
+        if(userInput.username === '' || userInput.password === '')
+            return displayErrorInputMessage();
         loadingSpinnerStore.SetLoadingVisibilityAndMessage(true, LOGIN_SPINNER_MESSAGE);
-        // callLoginAPI();
+        callLoginAPI();
     }
 
     function callLoginAPI() {
