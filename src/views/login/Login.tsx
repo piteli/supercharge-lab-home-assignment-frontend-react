@@ -1,5 +1,5 @@
 import React from 'react';
-import { HEADLINE_LOGIN, LOGIN_SUCCESS_MESSAGE } from './Login.constant';
+import { HEADLINE_LOGIN, LOGIN_SPINNER_MESSAGE, LOGIN_SUCCESS_MESSAGE } from './Login.constant';
 import { AUTHENTICATION_TYPE, GENERAL_ERROR_MESSAGE, LOGIN_API, LOGIN_WRONG_INPUT_MESSAGE } from '../../utils/constants/api.constant';
 import './Login.css';
 import { loginObjectType } from './Login.model';
@@ -18,26 +18,26 @@ function LoginView({toastStore, loadingSpinnerStore}: any) {
     const navigate = useNavigate();
 
     function loginClicked() {
-        if(userInput.username === '' || userInput.password === '')
-            return displayErrorInputMessage();
-        loadingSpinnerStore.SetLoadingVisibilityColorAndMessage(true, 'Logging In...');
-        callLoginAPI();
+        // if(userInput.username === '' || userInput.password === '')
+        //     return displayErrorInputMessage();
+        loadingSpinnerStore.SetLoadingVisibilityAndMessage(true, LOGIN_SPINNER_MESSAGE);
+        // callLoginAPI();
     }
 
     function callLoginAPI() {
         new ApiService().post(LOGIN_API, userInput, AUTHENTICATION_TYPE.BASIC)
             .then((res) => res.json()).then((responseJSON) => {
                 if(hasErrorResponse(responseJSON)) {
-                    loadingSpinnerStore.SetLoadingVisibilityColorAndMessage(false);
-                    toastStore.setToastVisibilityAndMessage(true, TOAST_BG_COLOR.ERROR, GENERAL_ERROR_MESSAGE);
+                    loadingSpinnerStore.SetLoadingVisibilityAndMessage(false);
+                    toastStore.setToastVisibilityColorAndMessage(true, TOAST_BG_COLOR.ERROR, GENERAL_ERROR_MESSAGE);
                     return;
                 }
                 new StorageService().setLocalStorage(responseJSON, USER_DETAILS);
-                toastStore.setToastVisibilityAndMessage(true, TOAST_BG_COLOR.ERROR, LOGIN_SUCCESS_MESSAGE);
+                toastStore.setToastVisibilityColorAndMessage(true, TOAST_BG_COLOR.ERROR, LOGIN_SUCCESS_MESSAGE);
                 navigate(ROUTES.FRIENDS);
             }).catch((e) => {
-                loadingSpinnerStore.SetLoadingVisibilityColorAndMessage(false);
-                toastStore.setToastVisibilityAndMessage(true, TOAST_BG_COLOR.ERROR, GENERAL_ERROR_MESSAGE);
+                loadingSpinnerStore.SetLoadingVisibilityAndMessage(false);
+                toastStore.setToastVisibilityColorAndMessage(true, TOAST_BG_COLOR.ERROR, GENERAL_ERROR_MESSAGE);
             })
     }
 

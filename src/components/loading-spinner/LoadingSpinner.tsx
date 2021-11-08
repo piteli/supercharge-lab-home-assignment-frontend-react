@@ -1,24 +1,18 @@
-import { loadingSpinnerPropertyType } from "./LoadingSpinner.model";
 import './LoadingSpinner.css';
+import { inject, observer } from 'mobx-react';
 
-export function LoadingSpinnerComponent(
-    property: loadingSpinnerPropertyType = 
-        {
-            color: 'black', 
-            size: 20, 
-            message: 'Loading...'
-        },
+function LoadingSpinnerComponent(
+    {loadingSpinnerStore}: any
 ): any {
     return(
             <div className="loading-container-overlay">
                 <div 
                     className="loader" 
-                    style={{
-                        color: property.color,
-                        fontSize: property.size    
-                    }}>
+                >
                 </div>
-                <h4>{property.message}</h4>
+                <h4>{loadingSpinnerStore.message}</h4>
             </div>
     );
 }
+
+export default inject('loadingSpinnerStore')(observer(LoadingSpinnerComponent));

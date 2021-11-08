@@ -1,4 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
+import { TOAST_BG_COLOR } from "../utils/constants/component.constant";
 
 export default class ToastStore {
     isToastVisible: boolean = false;
@@ -17,7 +18,7 @@ export default class ToastStore {
         )
     }
 
-    setToastVisibilityColorAndMessage(visible: boolean, color: string, message: string) {
+    setToastVisibilityColorAndMessage(visible: boolean, color: string = TOAST_BG_COLOR.SUCCESS, message: string = 'toast-message') {
         this.isToastVisible = visible;
         this.color = color;
         this.message = message;

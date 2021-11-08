@@ -12,6 +12,7 @@
 .toast-container {
     width: auto;
     background-color: green;
+    color: white;
     border: solid 1px grey;
     border-radius: 50px;
     padding: 10px;

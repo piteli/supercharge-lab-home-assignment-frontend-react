@@ -1,6 +1,6 @@
 import { inject, observer } from 'mobx-react';
 import './App.css';
-import { LoadingSpinnerComponent } from './components/loading-spinner/LoadingSpinner';
+import LoadingSpinnerComponent from './components/loading-spinner/LoadingSpinner';
 import LoginView from './views/login/Login';
 import RegisterView from './views/register/Register';
 import FriendsView from './views/friends/Friends';
@@ -27,7 +27,11 @@ function App({toastStore, loadingSpinnerStore}: any) {
       </Routes>
         {
             toastStore.isToastVisible ?
-              <ToastComponent /> : null
+              <ToastComponent {...{
+                color: 'white',
+                backgroundColor: 'black',
+                message: 'toast-message-here'
+              }} /> : null
         }
         {
             loadingSpinnerStore.isLoadingVisible ?
