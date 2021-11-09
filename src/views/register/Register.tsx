@@ -2,7 +2,7 @@ import React from 'react';
 import './Register.css';
 import { registerObjectType } from './Register.model';
 import { observer, inject } from 'mobx-react';
-import { AUTHENTICATION_TYPE, GENERAL_ERROR_MESSAGE, REGISTER_API } from '../../utils/constants/api.constant';
+import { AUTHENTICATION_TYPE, GENERAL_ERROR_MESSAGE, REGISTER_API, REGISTER_INVALID_INPUT_MESSAGE } from '../../utils/constants/api.constant';
 import { HEADLINE_REGISTER, REGISTER_SPINNER_MESSAGE, REGISTER_SUCCESS_MESSAGE } from './Register.constant';
 import ApiService from '../../services/api.service';
 import { hasErrorResponse } from '../../services/response.service';
@@ -64,7 +64,7 @@ function RegisterView({toastStore, loadingSpinnerStore}: any) {
     }
 
     function displayErrorInputMessage(){
-        //TO-DO: display error message to input
+        toastStore.setToastVisibilityAndMessage(true, REGISTER_INVALID_INPUT_MESSAGE);
         return;
     }
 
